@@ -21,7 +21,7 @@ export default function TabLayout() {
         ), }}  />
 
 
-      <Tabs.Screen name="about" options={{ 
+      <Tabs.Screen name="recepies_list" options={{ 
         title: 'Przepisy', 
         headerShown: false,
         tabBarIcon: ({ color, focused }) => (

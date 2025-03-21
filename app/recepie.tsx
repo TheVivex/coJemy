@@ -1,18 +1,59 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { Link } from 'expo-router';
+import React, { useEffect, useState } from "react";
+
 export default function Recepie() {
   const { id } = useLocalSearchParams();
+
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  let dane;
+  useEffect(() => {
+    fetch('http://cojemy.hcmp.pl/get_recepie.php?id=' + id)
+      .then(response => response.json())
+      .then(json => {
+        setData(json);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, []);
+  dane = Array(data)[0];
+
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#72E149" />;
+  }
+
+  let ingredients = dane["ingredients"].split(";");
+
+  function PrintElements(){
+    return (ingredients.map((item) => (
+      <Text>{`\u2022 ${item.replace('-', " ").replace('-', "")}`}</Text>
+          )))
+    
+  }
+  
   return (
-    <View style={styles.main}>
-      <Text>DEMO wartość {id}</Text>
-    </View>
+    <ScrollView style={styles.main}>
+      <Text style={styles.h1}>{dane["title"]}</Text>
+      
+      <View style={{flex:2}}>
+        <Text style={styles.h2}>Składniki:</Text>
+        <View>
+            {PrintElements()}
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   main: {
-    paddingTop: 50,
+    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
     flex:1
@@ -21,7 +62,11 @@ const styles = StyleSheet.create({
     flex:10,
   },
   h1:{
-    fontSize: 40
+    fontSize: 40,
+  },
+  h2:{
+    fontSize: 25,
+    marginTop: 50
   }
 
 });

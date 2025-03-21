@@ -1,6 +1,7 @@
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';  
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 export default function RecepiesList() {
@@ -36,7 +37,8 @@ export default function RecepiesList() {
     <View style={styles.main}>
           <View style={{flex: 0.1,flexDirection: "row", justifyContent: "space-between"}}>
             <Text style={styles.h1} >Przepisy</Text>
-            <Link style={styles.h1} href="/demo">+</Link>
+            <Link style={styles.plus} href="/demo"><AntDesign name="pluscircle" size={35} color="#72E149" /></Link>
+            
           </View>
     
           <ScrollView style={styles.list}>        
@@ -57,12 +59,17 @@ const styles = StyleSheet.create({
     flex:1,
   },
   h1:{
-    fontSize: 40
+    fontSize: 40,
+  },
+  plus:{
+    marginTop: 10,
   },
   obj: {
     borderColor: "#000000",
     borderStyle: "solid",
-    borderWidth: 2,
+    borderWidth: 1,
+    textAlign: 'center',   
+    fontWeight: "bold",
     padding: 9,
     borderRadius: 8,
     marginBottom: 10

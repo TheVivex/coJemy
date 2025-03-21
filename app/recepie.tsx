@@ -29,11 +29,18 @@ export default function Recepie() {
   }
 
   let ingredients = dane["ingredients"].split(";");
+  let theWay = dane["preparation"];
 
-  function PrintElements(){
-    return (ingredients.map((item) => (
-      <Text>{`\u2022 ${item.replace('-', " ").replace('-', "")}`}</Text>
-          )))
+
+  function PrintElements(x){
+    if(x == 0){
+      return (ingredients.map((item) => (
+        <Text>{`\u2022 ${item.replace('-', " ").replace('-', "")}`}</Text>
+            )))
+    }
+    else if(x == 1){
+      return (<Text>{theWay}</Text>)
+    }
     
   }
   
@@ -44,9 +51,16 @@ export default function Recepie() {
       <View style={{flex:2}}>
         <Text style={styles.h2}>Składniki:</Text>
         <View>
-            {PrintElements()}
+            {PrintElements(0)}
         </View>
       </View>
+      <View style={{flex:2}}>
+        <Text style={styles.h2}>Przygotowanie:</Text>
+        <View>
+            {PrintElements(1)}
+        </View>
+      </View>
+      
     </ScrollView>
   );
 }

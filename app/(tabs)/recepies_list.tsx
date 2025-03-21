@@ -2,12 +2,28 @@ import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import React, { useEffect, useState } from 'react';
 import { Link, useRouter } from 'expo-router';  
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Entypo from '@expo/vector-icons/Entypo';
 
 
 export default function RecepiesList() {
   
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+
+  function GetIcons(vegan = -1, gluten = -1, lactose = -1){
+      if(vegan == 1){
+        return (<Ionicons name="leaf" size={12} color="green" />)
+      }
+      else if(gluten == 0){
+        return (<MaterialIcons name="grass" size={12} color="#8a8a08" />)
+      }
+      else if(lactose == 0){
+        return (<Entypo name="bucket" size={12} color="#8a8a8a" />)
+      }
+  }
 
   function PrintElements(){
     
@@ -27,6 +43,11 @@ export default function RecepiesList() {
       return (data.map((item) => (
         <Link key={item.id} href={"/recepie?id="+item.id} style={styles.obj}>
               <Text>{item.title}</Text>
+              <View style={{flexDirection:"row"}}>
+                  {GetIcons(item.isVegan)}
+                  {GetIcons(undefined, item.isGlutenFree)}
+                  {GetIcons(undefined,undefined, item.isLactoseFree)}
+              </View>
         </Link>
       )))
     }
@@ -67,11 +88,13 @@ const styles = StyleSheet.create({
   obj: {
     borderColor: "#000000",
     borderStyle: "solid",
-    borderWidth: 1,
-    textAlign: 'center',   
+    borderWidth: 1, 
     fontWeight: "bold",
+    marginBottom: 10,
     padding: 9,
     borderRadius: 8,
-    marginBottom: 10
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   }
 });

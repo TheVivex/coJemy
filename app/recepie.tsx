@@ -28,6 +28,7 @@ export default function Recepie() {
   }
 
   let ingredients = dane["ingredients"].split(";");
+  ingredients.pop();
   let theWay = dane["preparation"];
 
 

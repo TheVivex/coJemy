@@ -34,8 +34,9 @@ export default function Recepie() {
 
   function PrintElements(x){
     if(x == 0){
+      let i = 0;
       return (ingredients.map((item) => (
-        <Text>{`\u2022 ${item.replace('-', " ").replace('-', "")}`}</Text>
+        <Text key={"bullet_"+i++}>{`\u2022 ${item.replace('-', " ").replace('-', "")}`}</Text>
             )))
     }
     else if(x == 1){

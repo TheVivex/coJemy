@@ -47,14 +47,14 @@ export default function Index() {
 
   return (
     <View style={styles.main}>
+      {/* Nagłówek */}
       <View style={styles.header}>
         <Text style={styles.h1}>coJemy</Text>
-         {/* przelozyc do przepisow*/}
-         <TouchableOpacity style={styles.addButton} onPress={() => router.push("/demo")}>
-         <AntDesign name="pluscircle" size={24} color="#72E149" />
-        </TouchableOpacity>
+        
+        
       </View>
 
+      {/* pobierz listę zakupow */}
       <View style={styles.list}>
         {data?.map((item) => (
           <TouchableOpacity
@@ -67,6 +67,19 @@ export default function Index() {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* losuj przepis */}
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.footerButton} onPress={() => router.push("/lista")}>
+          <AntDesign name="shoppingcart" size={20} color="black" />
+          <Text style={styles.footerButtonText}>Pobierz listę</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.footerButton} onPress={() => router.push("/losuj")}>
+          <AntDesign name="bars" size={20} color="black" />
+          <Text style={styles.footerButtonText}>Losuj przepisy</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -74,7 +87,7 @@ export default function Index() {
 //style
 const styles = StyleSheet.create({
   main: {
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 20,
     flex: 1,
     backgroundColor: "#f8f9fa",
@@ -83,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 40,
   },
   h1: {
     fontSize: 40,
@@ -116,6 +129,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  footer: {
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  footerButton: {
+    backgroundColor: "#f8f9fa",
+    borderColor: "#72E149",   
+    borderWidth: 1,  
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 15,
+    width: "100%",
+    justifyContent: "center",
+  },
+  footerButtonText: {
+    fontSize: 18,
+    color: "black",
+    marginLeft: 10,
   },
 });
 

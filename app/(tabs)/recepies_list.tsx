@@ -58,7 +58,7 @@ export default function RecepiesList() {
     <View style={styles.main}>
           <View style={{flex: 0.1,flexDirection: "row", justifyContent: "space-between"}}>
             <Text style={styles.h1} >Przepisy</Text>
-            <Link style={styles.plus} href="/demo"><AntDesign name="pluscircle" size={35} color="#72E149" /></Link>
+            <Link style={styles.plus} href="/new"><AntDesign name="pluscircle" size={35} color="#72E149" /></Link>
             
           </View>
     

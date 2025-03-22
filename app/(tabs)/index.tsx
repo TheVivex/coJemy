@@ -10,7 +10,10 @@ interface Recipe {
   title: string;
 }
 
+
+
 export default function Index() {
+  const [key, setKey] = useState(0);
   const [data, setData] = useState<Recipe[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -26,9 +29,11 @@ export default function Index() {
     "Ndz.": "#A2FF84",
   };  
 
-  //pobierz api
-  useEffect(() => {
-    fetch("http://cojemy.hcmp.pl")
+  
+  const reloadPage = () => {
+    setLoading(true);
+  
+    fetch("http://cojemy.hcmp.pl/get_week.php?new=1")
       .then((response) => response.json())
       .then((json: Recipe[]) => {
         setData(json);
@@ -38,20 +43,39 @@ export default function Index() {
         console.error(error);
         setLoading(false);
       });
+    
+
+  };
+
+
+  useEffect(() => {
+    fetch("http://cojemy.hcmp.pl/get_week.php")
+      .then((response) => response.json())
+      .then((json: Recipe[]) => {
+        setData(json);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });      
   }, []);
+
 
   //spiner
   if (loading) {
     return <ActivityIndicator size="large" color="#72E149" />;
   }
 
+  let week_ids = [];
+  for(let i = 0; i< 7; i++){
+    week_ids.push(data[i]["id"]);
+  }
   return (
     <View style={styles.main}>
       {/* Nagłówek */}
       <View style={styles.header}>
         <Text style={styles.h1}>coJemy</Text>
-        
-        
       </View>
 
       {/* pobierz listę zakupow */}
@@ -70,12 +94,12 @@ export default function Index() {
 
       {/* losuj przepis */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton} onPress={() => router.push("/lista")}>
+        <TouchableOpacity style={styles.footerButton} onPress={() => router.push(`/lista?ids_sr=${week_ids}`)}>
           <AntDesign name="shoppingcart" size={20} color="black" />
           <Text style={styles.footerButtonText}>Pobierz listę</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerButton} onPress={() => router.push("/losuj")}>
+        <TouchableOpacity style={styles.footerButton} onPress={() => { reloadPage() }}>
           <AntDesign name="bars" size={20} color="black" />
           <Text style={styles.footerButtonText}>Losuj przepisy</Text>
         </TouchableOpacity>

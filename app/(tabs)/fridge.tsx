@@ -2,6 +2,7 @@ import { Text, View, ScrollView, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 let firstTime = true;
 export default function Fridge() {
@@ -34,18 +35,20 @@ const PrintElements = () => {
   }
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  setTimeout(() => {
-    fetch('http://cojemy.hcmp.pl/get_fridge.php')
-        .then(response => response.json())
-        .then(json => {
-          setData(json);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.error(error);
-          setLoading(false);
-        }); 
-  },Sprawdz())
+  if(useIsFocused()){
+    setTimeout(() => {
+      fetch('http://cojemy.hcmp.pl/get_fridge.php')
+          .then(response => response.json())
+          .then(json => {
+            setData(json);
+            setLoading(false);
+          })
+          .catch(error => {
+            console.error(error);
+            setLoading(false);
+          }); 
+    },Sprawdz())
+  }
   
   const transformData = (input) => {
     return input.map(item => {

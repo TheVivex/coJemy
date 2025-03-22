@@ -2,6 +2,7 @@ import { Text, View, StyleSheet, ActivityIndicator, TouchableOpacity } from "rea
 import React, { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useIsFocused } from '@react-navigation/native';
 
 
 interface Recipe {
@@ -59,13 +60,14 @@ export default function Index() {
 }
 
 const MenuList = () => {
+  
   function Sprawdz(){
     if(firstTime){
       firstTime = false;
       return 0
     }
     
-    return 1000;
+    return 500;
   }
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,23 +81,27 @@ const MenuList = () => {
     "Sob.": "#9BFF7A",
     "Ndz.": "#A2FF84",
   };
-  timer = setTimeout(() => {
-    fetch("http://cojemy.hcmp.pl/get_week.php")
-    .then(response => response.json())
-    .then(json => {
-      setData(json);
-      setLoading(false);
-    })
-    .catch(error => {
-      console.error(error);
-      setLoading(false);
-    }); 
-  },Sprawdz())  
+  if(useIsFocused()){
+    timer = setTimeout(() => {
+      fetch("http://cojemy.hcmp.pl/get_week.php")
+      .then(response => response.json())
+      .then(json => {
+        setData(json);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setLoading(false);
+      }); 
+    },Sprawdz()) 
+  }
+   
   
   if (loading) {
     return <ActivityIndicator size="large" color="#72E149" />;
   }
   if(data && data[0]){
+    week_ids = [];
     for(let i = 0; i< 7; i++){
       week_ids.push(data[i]["id"]);
     }

@@ -9,6 +9,7 @@ export default function RootLayout() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false}} />
       <Stack.Screen name="recepie" options={{ headerShown: true, title: "Przepis" }} />
       <Stack.Screen name="new" options={{ headerShown: true, title: "Nowy przepis" }} />
+      <Stack.Screen name="new_fridge" options={{ headerShown: true, title: "Nowy składnik" }} />
       <Stack.Screen name="lista" options={{ headerShown: true, title: "Lista zakupów" }} />
       <Stack.Screen name="+not-found" />
     </Stack>

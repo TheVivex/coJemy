@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+
 
 export default function Recepie() {
   const { id } = useLocalSearchParams();
@@ -47,8 +47,6 @@ export default function Recepie() {
   }
   
   return (
-
-
     <ScrollView style={styles.main}>
       <Text style={styles.h1}>{dane["title"]}</Text>
       

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useState } from "react";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Checkbox from 'expo-checkbox';
@@ -6,13 +6,20 @@ import Checkbox from 'expo-checkbox';
 
 export default function AddNew() {
   const [text, setText] = useState("");
+  const [recipeName, setRecipeName] = useState(""); 
+  const [preparationText, setPreparationText] = useState("");
 
-  const handleInputChange = (input) => {
-    setText(input);
+ 
+  const handleRecipeNameChange = (input) => {
+    setRecipeName(input);
   };
 
   const handleSubmit = () => {
     alert(`You entered: ${text}`);
+  };
+
+  const handlePreparationChange = (input) => {
+    setPreparationText(input);
   };
 
   //funkcja do dodawania skladnikow
@@ -34,6 +41,7 @@ export default function AddNew() {
 
 
   return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
     <ScrollView>
     <View style={styles.container}>
       <Text style={styles.h2}>Nazwa przepisu</Text>
@@ -41,8 +49,8 @@ export default function AddNew() {
         style={styles.input}
         placeholder="Wpisz nazwę przepisu"
         placeholderTextColor="gray" 
-        onChangeText={handleInputChange}
-        value={text}
+        onChangeText={handleRecipeNameChange}  // Use handleRecipeNameChange here
+        value={recipeName}
       />
 
 <Text style={styles.h2}>Składniki</Text>
@@ -107,8 +115,8 @@ export default function AddNew() {
         style={styles.input_desc}
         placeholder="Opisz sposób przygotowania..."
         placeholderTextColor="gray" 
-        onChangeText={handleInputChange}
-        value={text}
+        onChangeText={handlePreparationChange}
+        value={preparationText}
       />
       
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
@@ -119,6 +127,7 @@ export default function AddNew() {
 
     </View>
      </ScrollView>
+     </KeyboardAvoidingView>
   );
 }
 

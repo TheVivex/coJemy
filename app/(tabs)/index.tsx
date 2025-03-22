@@ -15,11 +15,15 @@ function timeout(delay: number) {
 }
 
 let week_ids = [];
+let timer;
 export default function Index() {
-
+  const router = useRouter();
   const Update = () => {  
     fetch("http://cojemy.hcmp.pl/get_week.php?new=1")
     .then(response => response.json())
+    .then(json => {
+      firstTime = true;
+    })
     .catch(error => {
       console.error(error);
     }); 
@@ -61,7 +65,7 @@ const MenuList = () => {
       return 0
     }
     
-    return 5000;
+    return 1000;
   }
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -75,8 +79,7 @@ const MenuList = () => {
     "Sob.": "#9BFF7A",
     "Ndz.": "#A2FF84",
   };
-  
-  setTimeout(() => {
+  timer = setTimeout(() => {
     fetch("http://cojemy.hcmp.pl/get_week.php")
     .then(response => response.json())
     .then(json => {

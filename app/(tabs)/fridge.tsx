@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import React, { useEffect, useState } from 'react';
 
+let firstTime = true;
 export default function Fridge() {
   return (
     <View style={styles.main}>
@@ -23,9 +24,18 @@ export default function Fridge() {
 
 let isLoaded = false;
 const PrintElements = () => {
+  function Sprawdz(){
+    if(firstTime){
+      firstTime = false;
+      return 0
+    }
+    
+    return 5000;
+  }
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  fetch('http://cojemy.hcmp.pl/get_fridge.php')
+  setTimeout(() => {
+    fetch('http://cojemy.hcmp.pl/get_fridge.php')
         .then(response => response.json())
         .then(json => {
           setData(json);
@@ -35,6 +45,8 @@ const PrintElements = () => {
           console.error(error);
           setLoading(false);
         }); 
+  },Sprawdz())
+  
   const transformData = (input) => {
     return input.map(item => {
       return {

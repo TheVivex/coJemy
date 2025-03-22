@@ -1,6 +1,7 @@
 import { Text, View, ScrollView, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import React, { useEffect, useState } from 'react';
 
 export default function Fridge() {
   return (
@@ -20,30 +21,51 @@ export default function Fridge() {
 }
 
 
-
+let isLoaded = false;
 const PrintElements = () => {
-  const ingredients = [
-    { name: "Mleko", amount: 1, unit: "L", expirationDate: "2025-04-10" },
-    { name: "Jajka", amount: 10, unit: "szt.", expirationDate: "2025-03-30" },
-    { name: "Ser", amount: 200, unit: "g", expirationDate: "2025-04-15" },
-  ];
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  fetch('http://cojemy.hcmp.pl/get_fridge.php')
+        .then(response => response.json())
+        .then(json => {
+          setData(json);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setLoading(false);
+        }); 
+  const transformData = (input) => {
+    return input.map(item => {
+      return {
+        name: item.id,
+        amount: item.amount,
+        unit: item.unit,
+        expirationDate: item.expiration_date
+      };
+    });
+  };
+  if(data && data[0]){
+    const ingredients = transformData(data);
 
-  return (
-    <ScrollView>
-      {ingredients.map((item, index) => (
-        <View key={index} style={styles.obj}>
-          <View>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.amount}>{item.amount} {item.unit}</Text>
+    return (
+      <ScrollView>
+        {ingredients.map((item, index) => (
+          <View key={index} style={styles.obj}>
+            <View>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.amount}>{item.amount} {item.unit}</Text>
+            </View>
+            <View style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
+              <Text style={styles.expiration}>Ważne do: {item.expirationDate}</Text>
+            </View>
+            
           </View>
-          <View style={{display:"flex", alignItems: "center", justifyContent: "center"}}>
-            <Text style={styles.expiration}>Ważne do: {item.expirationDate}</Text>
-          </View>
-          
-        </View>
-      ))}
-    </ScrollView>
-  );
+        ))}
+      </ScrollView>
+    );
+  }
+  
 };
 
 

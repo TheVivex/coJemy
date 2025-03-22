@@ -9,68 +9,25 @@ interface Recipe {
   day: string;
   title: string;
 }
+let firstTime = true;
+function timeout(delay: number) {
+  return new Promise( res => setTimeout(res, delay) );
+}
 
-
-
+let week_ids = [];
 export default function Index() {
-  const [key, setKey] = useState(0);
-  const [data, setData] = useState<Recipe[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
 
-
-  const buttonColors: { [key: string]: string } = {
-    "Pon.": "#72E149",
-    "Wt.": "#7AE253",
-    "Śr.": "#82E85D",
-    "Czw.": "#8BEC66",
-    "Pt.": "#94F06F",
-    "Sob.": "#9BFF7A",
-    "Ndz.": "#A2FF84",
-  };  
-
-  
-  const reloadPage = () => {
-    setLoading(true);
-  
+  const Update = () => {  
     fetch("http://cojemy.hcmp.pl/get_week.php?new=1")
-      .then((response) => response.json())
-      .then((json: Recipe[]) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });
+    .then(response => response.json())
+    .catch(error => {
+      console.error(error);
+    }); 
     
 
   };
 
 
-  useEffect(() => {
-    fetch("http://cojemy.hcmp.pl/get_week.php")
-      .then((response) => response.json())
-      .then((json: Recipe[]) => {
-        setData(json);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-      });      
-  }, []);
-
-
-  //spiner
-  if (loading) {
-    return <ActivityIndicator size="large" color="#72E149" />;
-  }
-
-  let week_ids = [];
-  for(let i = 0; i< 7; i++){
-    week_ids.push(data[i]["id"]);
-  }
   return (
     <View style={styles.main}>
       {/* Nagłówek */}
@@ -79,18 +36,7 @@ export default function Index() {
       </View>
 
       {/* pobierz listę zakupow */}
-      <View style={styles.list}>
-        {data?.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[styles.button, { backgroundColor: buttonColors[item.day] || "#ddd" }]}
-            onPress={() => router.push(`/recepie?id=${item.id}`)}
-          >
-            <Text style={styles.recipeDay}>{item.day}</Text>
-            <Text style={styles.recipeName}>{item.title}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <MenuList />
 
       {/* losuj przepis */}
       <View style={styles.footer}>
@@ -99,13 +45,74 @@ export default function Index() {
           <Text style={styles.footerButtonText}>Pobierz listę</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.footerButton} onPress={() => { reloadPage() }}>
+        <TouchableOpacity style={styles.footerButton} onPress={() => { Update() }}>
           <AntDesign name="bars" size={20} color="black" />
           <Text style={styles.footerButtonText}>Losuj przepisy</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
+}
+
+const MenuList = () => {
+  function Sprawdz(){
+    if(firstTime){
+      firstTime = false;
+      return 0
+    }
+    
+    return 5000;
+  }
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const buttonColors: { [key: string]: string } = {
+    "Pon.": "#72E149",
+    "Wt.": "#7AE253",
+    "Śr.": "#82E85D",
+    "Czw.": "#8BEC66",
+    "Pt.": "#94F06F",
+    "Sob.": "#9BFF7A",
+    "Ndz.": "#A2FF84",
+  };
+  
+  setTimeout(() => {
+    fetch("http://cojemy.hcmp.pl/get_week.php")
+    .then(response => response.json())
+    .then(json => {
+      setData(json);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+      setLoading(false);
+    }); 
+  },Sprawdz())  
+  
+  if (loading) {
+    return <ActivityIndicator size="large" color="#72E149" />;
+  }
+  if(data && data[0]){
+    for(let i = 0; i< 7; i++){
+      week_ids.push(data[i]["id"]);
+    }
+    return (
+      <View style={styles.list}>
+          {data?.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[styles.button, { backgroundColor: buttonColors[item.day] || "#ddd" }]}
+              onPress={() => router.push(`/recepie?id=${item.id}`)}
+            >
+              <Text style={styles.recipeDay}>{item.day}</Text>
+              <Text style={styles.recipeName}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+    )
+  }   
+  
+  
 }
 
 //style

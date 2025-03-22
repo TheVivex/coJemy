@@ -10,7 +10,7 @@ export default function Fridge() {
     <View style={styles.main}>
       <View style={{ flex: 0.1, flexDirection: "row", justifyContent: "space-between" }}>
         <Text style={styles.h1}>Lodówka</Text>
-        <Link style={styles.plus} href="/add_fridge">
+        <Link style={styles.plus} href="/new_fridge">
           <AntDesign name="pluscircle" size={35} color="#72E149" />
         </Link>
       </View>
